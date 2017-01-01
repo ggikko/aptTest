@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.Set;
 
 import javax.annotation.processing.AbstractProcessor;
+import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
 import javax.annotation.processing.SupportedAnnotationTypes;
 import javax.annotation.processing.SupportedSourceVersion;
@@ -17,6 +18,11 @@ import javax.tools.JavaFileObject;
 @SupportedAnnotationTypes("me.ggikko.GgikkoAnnotation")
 @SupportedSourceVersion(SourceVersion.RELEASE_7)
 public class HelloProcessor extends AbstractProcessor {
+
+    @Override
+    public synchronized void init(ProcessingEnvironment processingEnvironment) {
+        super.init(processingEnvironment);
+    }
 
     @Override
     public SourceVersion getSupportedSourceVersion() {
@@ -42,7 +48,6 @@ public class HelloProcessor extends AbstractProcessor {
             String objectType = element.getSimpleName().toString();
 
 
-
             // this is appending to the return statement
             builder.append(objectType).append(" ");
         }
@@ -51,7 +56,6 @@ public class HelloProcessor extends AbstractProcessor {
         builder.append("\";\n") // end return
                 .append("\t}\n") // close method
                 .append("}\n"); // close class
-
 
 
         try { // write the file
