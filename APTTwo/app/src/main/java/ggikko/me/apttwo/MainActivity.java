@@ -10,7 +10,6 @@ import me.ggikko.GgikkoMessageHandler;
 @GgikkoAnnotation
 public class MainActivity extends AppCompatActivity {
 
-    @GgikkoAnnotation
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

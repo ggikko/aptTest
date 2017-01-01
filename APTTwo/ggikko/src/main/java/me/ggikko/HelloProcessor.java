@@ -2,6 +2,7 @@ package me.ggikko;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.util.Collections;
 import java.util.Set;
 
 import javax.annotation.processing.AbstractProcessor;
@@ -16,8 +17,19 @@ import javax.tools.JavaFileObject;
 @SupportedAnnotationTypes("me.ggikko.GgikkoAnnotation")
 @SupportedSourceVersion(SourceVersion.RELEASE_7)
 public class HelloProcessor extends AbstractProcessor {
+
     @Override
-    public boolean process(Set<? extends TypeElement> set, RoundEnvironment roundEnvironment) {
+    public SourceVersion getSupportedSourceVersion() {
+        return super.getSupportedSourceVersion();
+    }
+
+    @Override
+    public Set<String> getSupportedAnnotationTypes() {
+        return Collections.singleton(GgikkoAnnotation.class.getName());
+    }
+
+    @Override
+    public boolean process(Set<? extends TypeElement> set, RoundEnvironment env) {
         StringBuilder builder = new StringBuilder()
                 .append("package me.ggikko;\n")
                 .append("public class GgikkoMessageHandler {\n\n") // open class
@@ -26,7 +38,7 @@ public class HelloProcessor extends AbstractProcessor {
 
 
         // for each javax.lang.model.element.Element annotated with the CustomAnnotation
-        for (Element element : roundEnvironment.getElementsAnnotatedWith(GgikkoAnnotation.class)) {
+        for (Element element : env.getElementsAnnotatedWith(GgikkoAnnotation.class)) {
             String objectType = element.getSimpleName().toString();
 
 
@@ -43,6 +55,7 @@ public class HelloProcessor extends AbstractProcessor {
 
 
         try { // write the file
+
             JavaFileObject source = processingEnv.getFiler().createSourceFile("me.ggikko.GgikkoMessageHandler");
 
 
