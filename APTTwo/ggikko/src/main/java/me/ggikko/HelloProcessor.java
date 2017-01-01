@@ -2,7 +2,9 @@ package me.ggikko;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 import javax.annotation.processing.AbstractProcessor;
@@ -44,14 +46,12 @@ public class HelloProcessor extends AbstractProcessor {
 
 
         // for each javax.lang.model.element.Element annotated with the CustomAnnotation
-        for (Element element : env.getElementsAnnotatedWith(GgikkoAnnotation.class)) {
-            String objectType = element.getSimpleName().toString();
 
-
+        List<String> types = parseAnnotations(env);
+        for (String type : types) {
             // this is appending to the return statement
-            builder.append(objectType).append(" ");
+            builder.append(type).append(" ");
         }
-
 
         builder.append("\";\n") // end return
                 .append("\t}\n") // close method
@@ -74,5 +74,14 @@ public class HelloProcessor extends AbstractProcessor {
 
 
         return true;
+    }
+
+    private List<String> parseAnnotations(RoundEnvironment env) {
+        List<String> list = new ArrayList<>();
+        for (Element element : env.getElementsAnnotatedWith(GgikkoAnnotation.class)) {
+            String objectType = element.getSimpleName().toString();
+            list.add(objectType);
+        }
+        return list;
     }
 }
